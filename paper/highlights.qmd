@@ -1,0 +1,59 @@
+---
+title: "msqrob2TMT: robust linear mixed models for inferring differential abundant proteins in labelled experiments with arbitrarily complex design - Highlights"
+authors:
+  - name: Stijn Vandenbulcke
+    affiliations:
+      - ref: VIB
+      - ref: Biomed
+      - ref: UGent
+  - name: Christophe Vanderaa
+    affiliations:
+      - ref: UGent
+  - name: Oliver Crook
+    affiliations:
+      - ref: UK
+  - name: Lennart Martens
+    affiliations:
+      - ref: VIB
+      - ref: Biomed
+  - name: Lieven Clement
+    affiliations:
+      - ref: UGent
+    corresponding: true
+
+affiliations:
+  - id: VIB
+    name: VIB-UGent Center for Medical Biotechnology, VIB, Ghent, Belgium
+  - id: Biomed
+    name: Department of Biomolecular Medicine, Ghent University, Ghent, Belgium
+  - id: UGent
+    name: Department of Applied Mathematics, Computer Science and Statistics, Ghent University, Ghent, Belgium
+  - id: UK
+    name: Department of Statistics, University of Oxford, Oxford, UK.
+
+bibliography: references.bib
+
+format:
+  pdf:
+    mathspec: true
+    number-sections: true
+    number-depth: 3
+    pdf-engine: latexmk
+    pdf-engine-opt: -xelatex
+    keep-tex: true
+    include-in-header:
+      text:
+        \usepackage{amsmath, booktabs, caption, longtable, xcolor, todonotes}
+editor: source
+crossref:
+  fig-title: Figure     # (default is "Figure")
+  fig-prefix: Figure
+---
+
+# Highlights
+
+- Statistical workflows for differential abundance analysis in labelled proteomics.
+- Enhanced sensitivity and specificity.
+- Flexible modelling for experiments with both simple and complex designs.
+- Benchmarked against DEqMS, MSstatsTMT, and msTrawler using two spike-in datasets.
+- Transparent and modular workflows through open-source Bioconductor package msqrob2.
