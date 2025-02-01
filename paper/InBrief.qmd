@@ -53,4 +53,4 @@ crossref:
 # In Brief
 
 Novel msqrob2TMT workflows for differential abundance analysis of labelled proteomics data with simple and complex designs. Incorporating modular preprocessing and flexible modelling using multiple continuous and categorical variables, and their interactions. Accounting for correlations within spectra, channels, runs, mixtures, and in longitudinal designs using random effects.
-Improved performance of our peptide-level and protein-level robust regression workflows over existing methods, demonstrated in two spike-in studies and one case study. Accessible through open-source Bioconductor package msqrob2 and companion GitHub page: https://github.com/statOmics/msqrob2TMT_paper.
+Improved performance of our peptide-level and protein-level robust regression workflows over existing methods, demonstrated in two spike-in studies and one case study. Accessible through open-source Bioconductor package msqrob2 and companion GitHub page: https://github.com/statOmics/msqrob2tmt_paper.

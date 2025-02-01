@@ -137,9 +137,15 @@ repository](https://zenodo.org/records/14767905).
 
 ## Getting the data
 
-Although all datasets are publicly available, we have deposited all
-the required data to run the analyses in a
-[Zenodo repository](https://zenodo.org/records/14767905).
+The data from the MSstatsTMT spike-in study, the msTrawler multibatch
+benchmarking study and the mouse case study are available in the PRIDE
+repositories under PXD0015258, PXD036799, and PXD005953, respectively.
+For the reproducibility of results, the data for PXD0015258,
+PXD036799, and PXD005953 were downloaded from MassIVE (RMSV000000265),
+[Google Cloud
+storage](https://console.cloud.google.com/storage/browser/mstrawler_paper),
+and MassIVE (RMSV000000264), respectively, and timestamped by creating
+a [Zenodo repository](https://zenodo.org/records/14767905).
 
 All input data are automatically downloaded within the scripts, using
 the Bioconductor `BiocFileCache` package. This package will ensure an
