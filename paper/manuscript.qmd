@@ -261,7 +261,7 @@ Using two spike-in studies and one experimental case study, we highlight how the
 #| fig-cap: "Overview of the tools considered in this work and the model parameterisation they enable. Green tick marks indicate that the method supports the specific model parameterisation. Note, that \"other\" in the random effect parameterisation refers to other random effects implied by the design, e.g. in studies with longitudinal or clustered designs. (*) msTrawler can only account for interactions between a factor and a continuous time trend."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/model_overview.png", error = FALSE)
+knitr::include_graphics("../figs/figure1.png", error = FALSE)
 
 ```
 
@@ -277,7 +277,7 @@ In @fig-WorkflowComparisons A, we compare the performance of the different metho
 #| label: fig-WorkflowComparisons
 #| fig-cap: "Performance in the MSstatsTMT spike-in study. Panel A: True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, MSstatsTMT, msTrawler and msqrob2TMT workflows. Note, that the import function of msTrawler did not properly import the data. So we also provide results for msTrawler with a refactored import function, referred to as msTrawler\_fixed. The combined performance over all the dilution comparisons is shown. Dots indicate the TPR and FDP obtained at the 5% FDR threshold. Panel B: Number of fitted proteins for each workflow. Panel C: Number of true and false positives over all the comparisons."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein1_tpr_fdp.png", error = FALSE)
+knitr::include_graphics("../figs/figure2.png", error = FALSE)
 
 df_spike1 <- list.files(dataDir, "spikein1_model", full.names = TRUE) |>
     lapply(readRDS) |>
@@ -369,7 +369,7 @@ In @fig-fold_change_spike we evaluate the $\log_2$ FC estimates. @fig-fold_chang
 #| label: fig-fold_change_spike
 #| fig-cap: "Boxplots showing the log2 FC distributions for the spike-in proteins, focusing on two comparisons with the highest and lowest difference in spike-in concentrations. Fold changes are estimated by DEqMS, msqrob2TMT, MSstatsTMT, and msTrawler workflows. The grey dotted line is the true log2 FC for the comparison. Panel A: non spike-in proteins (yeast); Panel B: spike-in proteins."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein1_logFC.png", error = FALSE)
+knitr::include_graphics("../figs/figure3.png", error = FALSE)
 ```
 
 Finally, Supplementary @fig-spikein1_pvalue_dist_nondiff shows that MSstatsTMT, msTrawler, and our msqrob2TMT workflows all produce fairly uniform p-value distributions for non-spike-in proteins. DEqMS, however, shows a slight inflation at low p-values. The ridge regression p-values are slightly over-conservative with a notable spike at p-values equal to 1, due to the shrinkage of FCs for non-spike-in proteins.
@@ -383,7 +383,7 @@ A unique feature of the msqrob2TMT workflows is the regularisation of parameter 
 #| fig-cap: "True positive rate (TPR) - false discovery proportion (FDP) plots showing the effect of robust M-estimation and ridge regression on the performance of the msqrob2TMT protein-level (panel A) and PSM-level workflows (panel B). Combined performance over all comparisons is shown. Differential abundance is inferred with msqrob2TMT with a vanilla linear mixed model (lmm), a linear mixed model fitted via robust M-estimation (rlmm), ridge regression (rilmm), or robust M-estimation and ridge regression (rrilmm). Dots indicate the TPR and FDP obtained at the 5% FDR threshold."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/spikein1_msqrob2_estimation_features.png", error = FALSE)
+knitr::include_graphics("../figs/figure4.png", error = FALSE)
 
 ```
 
@@ -452,7 +452,7 @@ particularly conservative for this dataset with an artificially high number of D
 #| fig-cap: "Performance in the msTrawler Multibatch Benchmarking Study. Panel A: True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, msTrawler, and msqrob2TMT workflows. Combined performance over all comparisons is shown. Dots indicate the TPR and FDP obtained at the 5% FDR threshold. Note, that the performance of msqrob2_rrilmm and msqrob2_psm_rrillm_refit are on par, so their TPR-FDP curves almost coincide. Panel B: Number of fitted proteins for each workflow. Panel C: Number of true and false positives over all comparisons."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/spikein2_tpr_fdp.png", error = FALSE)
+knitr::include_graphics("../figs/figure5.png", error = FALSE)
 ```
 
 For a fair comparison, we also report TPR-FDP curves using all ground truth DA proteins as the maximum number of TP that can be reported for each comparison (Supplementary @fig-WorkflowComparisonsSpikein2ALL B) as well as those based on the common subset of proteins assessed by all workflows (Supplementary @fig-WorkflowComparisonsSpikein2ALL C). In Supplementary @fig-WorkflowComparisonsSpikein2ALL B, we observe a large decrease in performance for PSM-level method msqrob2\_psm\_rrilmm, which is due to the vast number of one-hit-wonder yeast proteins. However, after refitting, msqrob2\_psm\_rrilmm\_refit recovers performance comparable to that of our msqrob2\_rrilmm workflow, which outperform msTrawler irrespectively of the set of ground truth DA proteins that is used to calculate the TPR (Supplementary @fig-WorkflowComparisonsSpikein2ALL A-C). Note, however, that the methods also differ in terms of their preprocessing. Specifically, msTrawler employs imputation and additional filtering. In Supplementary @fig-WorkflowComparisonsPreprocessingSpikein2, we therefore present results for msqrob2TMT models applied on msTrawler's preprocessed data, which demonstrates a further increased performance. This finding confirms the superior model fitting of our msqrob2TMT workflows compared to msTrawler.
@@ -466,7 +466,7 @@ In @fig-fold_change_spike2, we evaluate the $\log_2$FC estimates for non-DA mous
 #| label: fig-fold_change_spike2
 #| fig-cap: "Boxplots showing the log2 FC distributions for the spike-in proteins, focusing on two comparisons with the highest and lowest difference in spike-in concentrations. Fold changes are estimated by DEqMS, msqrob2TMT, and msTrawler workflows. The grey dotted line is the true log2 FC for the comparison. Panel A: non-spiked proteins (mouse); Panel B: spike-in proteins (yeast)."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein2_logFC.png", error = FALSE)
+knitr::include_graphics("../figs/figure6.png", error = FALSE)
 ```
 
 Finally, Supplementary @fig-spikein2_pvalue_dist_nondiff illustrates that both the msTrawler and msqrob2TMT workflows generate relatively uniform p-value distributions for non-spike-in proteins. The p-values derived from ridge regression are slightly over-conservative, and due to the shrinkage of FCs for the non-spiked proteins, there is a noticeable peak of p-values at 1. This histogram exhibits greater variability compared to Supplementary @fig-spikein1_pvalue_dist_nondiff likely due to the limited number of non-DA mouse proteins in the dataset (287 proteins only).
@@ -638,7 +638,7 @@ This research was funded by the Research Foundation Flanders (FWO) as project fu
 #| label: fig-WorkflowComparisonsFull
 #| fig-cap: "True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, msqrob2TMT, msTrawler, msTrawler\_fixed with a refactored import function and MSstatsTMT workflows based on all pairwise spike-in comparisons. Full Caption on the next page."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein1_supp_tpr_fdp.png", error = FALSE)
+knitr::include_graphics("../figs/figureS1.png", error = FALSE)
 ```
 
 **Supplementary Figure **[-@fig-WorkflowComparisonsFull]: True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, msqrob2TMT, msTrawler, msTrawler\_fixed with a refactored import function and MSstatsTMT workflows based on all pairwise spike-in comparisons. In Panel A the performance is based on the results that are returned by each workflow, in Panel B using all ground truth DA proteins as the maximum number of true positives that can be reported for each comparison (40 spike-in UPS proteins per comparison), and in panel C by only considering the common proteins that were assessed by every workflow. Dots indicate the TPR and FDP obtained at the 5% FDR threshold.
@@ -648,14 +648,14 @@ knitr::include_graphics("../figs/spikein1_supp_tpr_fdp.png", error = FALSE)
 #| label: fig-WorkflowComparisonsSeparateA
 #| fig-cap: "True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, MSstatsTMT, msTrawler, msTrawler\_fixed with a refactored import function and  msqrob2TMT workflows. The performance is based on the results that are returned by each workflow. Dots indicate the TPR and FDP obtained at the 5% FDR threshold."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein1_supp_comparison_1.png", error = FALSE)
+knitr::include_graphics("../figs/figureS2.png", error = FALSE)
 ```
 
 ```{r, echo  =FALSE, message  =FALSE, warning = FALSE, eval=TRUE, out.width="100%"}
 #| label: fig-WorkflowComparisonsSeparateB
 #| fig-cap: "True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, MSstatsTMT, msTrawler, msTrawler\_fixed with a refactored import function and  msqrob2TMT workflows. The TPR is based on all ground truth DA proteins as the maximum number of true positives that can be reported for each comparison (40 spike-in UPS proteins). Dots indicate the TPR and FDP obtained at the 5% FDR threshold."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein1_supp_comparison_2.png", error = FALSE)
+knitr::include_graphics("../figs/figureS3.png", error = FALSE)
 ```
 
 ```{r, echo  =FALSE, message  =FALSE, warning = FALSE, eval=TRUE, out.width="100%"}
@@ -663,7 +663,7 @@ knitr::include_graphics("../figs/spikein1_supp_comparison_2.png", error = FALSE)
 #| fig-cap: "True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, MSstatsTMT, msTrawler, msTrawler\_fixed with a refactored import function and  msqrob2TMT workflows. The performance is based on the common proteins that were assessed by every workflow. Dots indicate the TPR and FDP obtained at the 5% FDR threshold."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/spikein1_supp_comparison_3.png", error = FALSE)
+knitr::include_graphics("../figs/figureS4.png", error = FALSE)
 ```
 
 
@@ -672,7 +672,7 @@ knitr::include_graphics("../figs/spikein1_supp_comparison_3.png", error = FALSE)
 #| fig-cap: "True positive rate (TPR) - false discovery proportion (FDP) plots for MSstatsTMT and msqrob2TMT workflows using all technical repeats. The performance is based on all pairwise spike-in comparisons and only considering the results that are returned by each workflow (Panel A), all ground truth DA proteins as the maximum number of true positives that can be reported for each comparison (panel B), and the common proteins that were assessed by every method (panel C). Dots indicate the TPR and FDP obtained at the 5% FDR threshold."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/spikein1_supp_tpr_fdp_replication.png", error = FALSE)
+knitr::include_graphics("../figs/figureS5.png", error = FALSE)
 ```
 
 
@@ -680,7 +680,7 @@ knitr::include_graphics("../figs/spikein1_supp_tpr_fdp_replication.png", error =
 #| label: fig-spikein1_pvalue_dist_nondiff
 #| fig-cap: "Histograms of the p-values from non-spike-in proteins for the DEqMS, msqrob2TMT, MSstatsTMT and msTrawler workflows for two distinct pairwise comparisons between spike-in dilutions."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein1_null_distribution.png", error = FALSE)
+knitr::include_graphics("../figs/figureS6.png", error = FALSE)
 ```
 
 ```{r, echo  =FALSE, message  =FALSE, warning = FALSE, eval = TRUE, out.width="100%"}
@@ -688,7 +688,7 @@ knitr::include_graphics("../figs/spikein1_null_distribution.png", error = FALSE)
 #| fig-cap: "Caption on the next page."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/spikein1_supp_compare_preprocess.png", error = FALSE)
+knitr::include_graphics("../figs/figureS7.png", error = FALSE)
 ```
 
 **Supplementary Figure ** [-@fig-WorkflowComparisonsPreprocessing]: True positive rate (TPR) - false discovery proportion (FDP) illustrating the effect of the MSstatsTMT preprocessing on the performance for the msqrob2TMT protein-level models. MSstatsTMT preprocessing was conducted both with and without imputation, employing its accelerated failure time model, and, with and without reference normalisation using bridge channels. These configurations are denoted with the suffixes -noimp (no imputation), -imp (with imputation), -norefnorm (no reference normalisation) and -refnorm (with reference normalisation), respectively. Differential abundance on the preprocessed, summarised and normalised protein abundances was subsequently inferred with MSstatsTMT, msqrob2TMT with a vanilla linear mixed model (lmm) or  msqrob2TMT employing a linear mixed model fitted via  robust M-estimation and ridge regression (rrilmm). The combined performance over all the spike-in comparisons are shown. In Panel A the performance is based on the results that are returned by each workflow, in Panel B on all ground truth DA proteins per comparison (40 spike-in UPS proteins per comparison) and in Panel C by only considering the common proteins that were assessed by every workflow. Dots indicate the TPR and FDP obtained at the 5% FDR threshold.
@@ -700,7 +700,7 @@ knitr::include_graphics("../figs/spikein1_supp_compare_preprocess.png", error = 
 #| fig-cap: "Caption on the next page."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/spikein2_supp_tpr_fdp.png", error = FALSE)
+knitr::include_graphics("../figs/figureS8.png", error = FALSE)
 ```
 
 **Supplementary Figure ** [-@fig-WorkflowComparisonsSpikein2ALL]: True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, MSstatsTMT, msTrawler and msqrob2TMT workflows. The combined performance over all the comparisons are shown. In Panel A the performance is based on the results that are returned by each workflow, in Panel B on all ground truth DA proteins as the maximum number of true positives that can be reported for each comparison, and in panel C by only considering the common proteins that were assessed by every workflow. Dots indicate the TPR and FDP obtained at the 5% FDR threshold.
@@ -710,14 +710,14 @@ knitr::include_graphics("../figs/spikein2_supp_tpr_fdp.png", error = FALSE)
 #| fig-cap: "True positive rate (TPR) - false discovery proportion (FDP) plots for DEqMS, MSstatsTMT, msTrawler and msqrob2TMT workflows upon full msTrawler preprocessing. The combined performance over all the comparisons are shown. In Panel A the performance is based on the results that are returned by each workflow, in Panel B on all ground truth DA proteins as the maximum number of true positives that can be reported for each comparison, and in panel C by only considering the common proteins that were assessed by every workflow. Dots indicate the TPR and FDP obtained at the 5% FDR threshold."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/spikein2_supp_compare_preprocess.png", error = FALSE)
+knitr::include_graphics("../figs/figureS9.png", error = FALSE)
 ```
 
 ```{r, echo  =FALSE, message  =FALSE, warning = FALSE, out.width="100%"}
 #| label: fig-spikein2_pvalue_dist_nondiff
 #| fig-cap: "Histograms of the p-values from non-spike-in proteins for the DEqMS, msqrob2TMT, and msTrawler workflows for four distinct pairwise comparisons between spike-in dilutions."
 #| fig-pos: 'H'
-knitr::include_graphics("../figs/spikein2_null_distribution.png", error = FALSE)
+knitr::include_graphics("../figs/figureS10.png", error = FALSE)
 ```
 
 \section*{Mouse Study}
@@ -728,7 +728,7 @@ knitr::include_graphics("../figs/spikein2_null_distribution.png", error = FALSE)
 #| fig-width: 8
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/mouse_upset_early.png", error = FALSE)
+knitr::include_graphics("../figs/figureS11.png", error = FALSE)
 
 ```
 
@@ -738,7 +738,7 @@ knitr::include_graphics("../figs/mouse_upset_early.png", error = FALSE)
 #| fig-width: 8
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/mouse_upset_late.png", error = FALSE)
+knitr::include_graphics("../figs/figureS12.png", error = FALSE)
 
 ```
 
@@ -747,16 +747,7 @@ knitr::include_graphics("../figs/mouse_upset_late.png", error = FALSE)
 #| fig-cap: "Upset plot showing the overlap in significant proteins between the MSstatsTMT and the msqrob2TMT workflows for the average diet effect."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/mouse_upset_average.png", error = FALSE)
-```
-
-```{r, eval=FALSE, echo  =FALSE, message  =FALSE, warning = FALSE, out.width="100%"}
-#| label: fig-Upset-int
-#| fig-cap: "Upset plot showing the overlap in significant proteins between the MSstatsTMT and the msqrob2TMT workflows for the interaction."
-#| fig-pos: 'H'
-
-knitr::include_graphics("../figs/mouse_upset_interaction.png", error = FALSE)
-
+knitr::include_graphics("../figs/figureS13.png", error = FALSE)
 ```
 
 ```{r, echo  =FALSE, message  =FALSE, warning = FALSE, out.width="70%"}
@@ -764,12 +755,12 @@ knitr::include_graphics("../figs/mouse_upset_interaction.png", error = FALSE)
 #| fig-cap: "Over-representation analysis on the set of proteins identified as significant at a 5% FDR threshold by each method. Annotated protein sets were retrieved from KEGG. The significant proteins were tested for over-representation against either the set of identified proteins in the data set (left) or against the complete mouse proteome. Grey boxes indicate that a KEGG protein set (rows) were identified as over-represented by significant proteins identified by a method (column). The proteins identified by MSstatsTMT did not lead to significant KEGG pathway enrichment, hence the corresponding empty columns."
 #| fig-pos: 'H'
 
-knitr::include_graphics("../figs/mouse_supp_ora.png", error = FALSE)
+knitr::include_graphics("../figs/figureS14.png", error = FALSE)
 
 ```
 
 ```{r, echo  =FALSE, message  =FALSE, warning = FALSE,out.width="100%"}
 #| label: fig-mouse-mock-pval
 #| fig-cap: Histogram of the p-values from the mock analysis on the mouse dataset.  Only results for our PSM-level and protein-level msqrob2TMT workflows are shown, as the state-of-the-art tools could not fit the appropriate models to the data of the mouse study after including an additional mock treatment."
-knitr::include_graphics("../figs/mouse_supp_null_distribution.png", error = FALSE)
+knitr::include_graphics("../figs/figureS15.png", error = FALSE)
 ```

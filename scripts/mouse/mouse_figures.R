@@ -34,40 +34,7 @@ inference <- list.files(dataDir, "mouse_model", full.names = TRUE) |>
         Comparison = factor(Comparison, levels = comparisons)
     )
 
-####---- Supplementary: P-value distribution under the null ----####
-
-models <- c(
-    "msqrob2_rrilmm_mixture",
-    "msqrob2_rrilmm",
-    "msqrob2_psm_rrilmm",
-    "msqrob2_psm_rrilmm_refit"
-)
-
-dfPlotS1 <- mutate(inference,
-                   Model = factor(Model, levels = models)) |>
-    filter(ModelVariable == "Mock",
-           Model %in% models)
-
-(figS1 <- ggplot(dfPlotS1) +
-        aes(x = pval, color = Model) +
-        geom_borderstep(
-            stat = "bin", bins =40, position = "identity",
-            direction = "vh", bordercolour = "black",
-            borderwidth = 0.01
-        ) +
-        scale_colour_manual(values = colours) +
-        coord_cartesian(y = c(0, 200)) +
-        xlab("p-value") +
-        guides(col = guide_legend(nrow = 2, byrow = TRUE)) +
-        theme_bw() +
-        theme(legend.title = element_blank(),
-              legend.position = "bottom"))
-ggsave(
-    paste0(plotDir, "mouse_supp_null_distribution.png"), plot = figS1,
-    width = 6, height = 4
-)
-
-####---- Supplementary: Upset plots ----####
+####---- Figure S11-13: Upset plots ----####
 
 models <- c(
     "MSstatsTMT",
@@ -94,23 +61,19 @@ upsetPlots <- lapply(names(significantProteinList), function(i) {
 })
 names(upsetPlots) <- unique(significantHits$Comparison)
 
-png(paste0(plotDir, "mouse_upset_early.png"), res = 400, width = 2200, height = 2200)
+png(paste0(plotDir, "figureS11.png"), res = 400, width = 2200, height = 2200)
 upsetPlots$"LF - HF (early)"
 dev.off()
 
-png(paste0(plotDir, "mouse_upset_late.png"), res = 400, width = 2200, height = 2200)
+png(paste0(plotDir, "figureS12.png"), res = 400, width = 2200, height = 2200)
 upsetPlots$"LF - HF (late)"
 dev.off()
 
-png(paste0(plotDir, "mouse_upset_average.png"), res = 400, width = 2200, height = 2200)
+png(paste0(plotDir, "figureS13.png"), res = 400, width = 2200, height = 2200)
 upsetPlots$"LF - HF (averaged)"
 dev.off()
 
-png(paste0(plotDir, "mouse_upset_interaction.png"), res = 400, width = 2200, height = 2200)
-upsetPlots$Interaction
-dev.off()
-
-####---- Supplementary: Over-representation analysis ----####
+####---- Figure S14: Over-representation analysis ----####
 
 models <- c(
     "MSstatsTMT",
@@ -144,7 +107,7 @@ goResAll <- lapply(c("mouse", "identified"), function(background) {
     goRes
 })
 
-(figS3 <- do.call(rbind, goResAll) |>
+(figS14 <- do.call(rbind, goResAll) |>
         ggplot() +
         aes(x = Model, y = term_name) +
         geom_tile(fill = "grey50", colour = "grey30", linewidth = 0.5) +
@@ -156,6 +119,39 @@ goResAll <- lapply(c("mouse", "identified"), function(background) {
         theme(panel.grid = element_blank(),
               axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)))
 ggsave(
-    paste0(plotDir, "mouse_supp_ora.png"), plot = figS3,
+    paste0(plotDir, "figureS14.png"), plot = figS14,
     width = 6, height = 9
+)
+
+####---- Figure S15: P-value distribution under the null ----####
+
+models <- c(
+    "msqrob2_rrilmm_mixture",
+    "msqrob2_rrilmm",
+    "msqrob2_psm_rrilmm",
+    "msqrob2_psm_rrilmm_refit"
+)
+
+dfPlotS15 <- mutate(inference,
+                   Model = factor(Model, levels = models)) |>
+    filter(ModelVariable == "Mock",
+           Model %in% models)
+
+(figS15 <- ggplot(dfPlotS15) +
+        aes(x = pval, color = Model) +
+        geom_borderstep(
+            stat = "bin", bins =40, position = "identity",
+            direction = "vh", bordercolour = "black",
+            borderwidth = 0.01
+        ) +
+        scale_colour_manual(values = colours) +
+        coord_cartesian(y = c(0, 200)) +
+        xlab("p-value") +
+        guides(col = guide_legend(nrow = 2, byrow = TRUE)) +
+        theme_bw() +
+        theme(legend.title = element_blank(),
+              legend.position = "bottom"))
+ggsave(
+    paste0(plotDir, "figureS15.png"), plot = figS15,
+    width = 6, height = 4
 )

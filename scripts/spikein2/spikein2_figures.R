@@ -21,7 +21,7 @@ inference <- list.files(dataDir, "spikein2_model", full.names = TRUE) |>
     select(Protein, logFC, pval, adjPval, Comparison, Model) |>
     mutate(Differential = grepl("YEAST", Protein))
 
-####---- TPR-FDP curves ----####
+####---- Figure 5: TPR-FDP curves ----####
 
 models <- c(
     "msqrob2_rrilmm",
@@ -31,17 +31,17 @@ models <- c(
     "msTrawler"
 )
 
-dfPlot1 <- filter(inference, Model %in% models) |>
+dfPlot5 <- filter(inference, Model %in% models) |>
     group_by(Model) |>
     mutate(adjPval = p.adjust(pval, method = "BH"),
            Model = factor(Model, levels = models)) |>
     ungroup()
 
-(fig1A <- plotTprFdp(dfPlot1, colours) +
+(fig5A <- plotTprFdp(dfPlot5, colours) +
         ylim(c(0, 0.25)) +
         guides(fill = "none",
                colour = "none"))
-(fig1B <- group_by(dfPlot1, Model) |>
+(fig5B <- group_by(dfPlot5, Model) |>
         summarise(n = length(unique(Protein))) |>
         ggplot() +
         aes(y = n,
@@ -56,19 +56,19 @@ dfPlot1 <- filter(inference, Model %in% models) |>
         theme_bw() +
         theme(axis.text.x = element_blank(),
               axis.ticks.x = element_blank()))
-dfPlot1C <- group_by(dfPlot1, Model) |>
+dfPlot5C <- group_by(dfPlot5, Model) |>
     summarise("True Positives" = sum(adjPval < 0.05 & Differential),
               "False Positives" = sum(adjPval < 0.05 & !Differential)) |>
     pivot_longer(cols = c("True Positives", "False Positives"))
-(fig1C <- ggplot(dfPlot1C) +
+(fig5C <- ggplot(dfPlot5C) +
         aes(x = Model,
             y = value,
             fill = Model,
             label = value) +
         geom_bar(stat = "identity") +
-        geom_text(data = filter(dfPlot1C, value > 200),
+        geom_text(data = filter(dfPlot5C, value > 200),
                   vjust = 1.5, size = 2.5, colour = "white") +
-        geom_text(data = filter(dfPlot1C, value < 200),
+        geom_text(data = filter(dfPlot5C, value < 200),
                   vjust = -0.5, size = 2.5) +
         facet_grid(name ~ ., scales = "free") +
         scale_fill_manual(values = colours) +
@@ -77,9 +77,9 @@ dfPlot1C <- group_by(dfPlot1, Model) |>
         theme_bw() +
         theme(axis.text.x = element_blank(),
               axis.ticks.x = element_blank()))
-(fig1 <- fig1A +
-        fig1B +
-        fig1C +
+(fig5 <- fig5A +
+        fig5B +
+        fig5C +
         plot_layout(design = "AAB
                               AAC
                               AAC",
@@ -88,23 +88,23 @@ dfPlot1C <- group_by(dfPlot1, Model) |>
         theme(legend.position = "bottom",
               legend.title = element_blank()))
 ggsave(
-    paste0(plotDir, "spikein2_tpr_fdp.png"), plot = fig1,
+    paste0(plotDir, "figure5.png"), plot = fig5,
     width = 8, height = 6
 )
 
-####---- LogFC boxplots ----####
+####---- Figure 6: LogFC boxplots ----####
 
 targetComparisons <- c("11 - 1", "2 - 1")
-dfPlot2 <- mutate(inference,
+dfPlot6 <- mutate(inference,
                   Model = factor(Model, levels = models)) |>
     filter(Model %in% models,
            Comparison %in% targetComparisons)
 
 ## Some outliers were found, here is an overview of excluded entries
 limMax <- 2
-(outlierDf <- filter(dfPlot2, logFC > limMax & !Differential))
+(outlierDf <- filter(dfPlot6, logFC > limMax & !Differential))
 
-(fig2A <- filter(dfPlot2, !Differential) |>
+(fig6A <- filter(dfPlot6, !Differential) |>
         ggplot() +
         aes(y = logFC,
             colour = Model) +
@@ -117,7 +117,7 @@ limMax <- 2
         scale_colour_manual(values = colours) +
         theme_bw())
 
-(fig2B <- filter(dfPlot2, Differential) |>
+(fig6B <- filter(dfPlot6, Differential) |>
         ggplot() +
         aes(y = logFC,
             colour = Model) +
@@ -136,8 +136,8 @@ limMax <- 2
         scale_colour_manual(values = colours) +
         theme_bw())
 
-(fig2 <- fig2A +
-        fig2B +
+(fig6 <- fig6A +
+        fig6B +
         plot_layout(guides = "collect") +
         plot_annotation(tag_levels = "A") &
         guides(col = guide_legend(nrow = 2, byrow = TRUE)) &
@@ -148,19 +148,147 @@ limMax <- 2
               axis.ticks.x = element_blank())
 )
 ggsave(
-    paste0(plotDir, "spikein2_logFC.png"), plot = fig2,
+    paste0(plotDir, "figure6.png"), plot = fig6,
     width = 7, height = 5
 )
 
-####---- P-value distribution under the null ----####
+####---- Figure S8: TPR-FDP curves for 3 strategies ----####
 
-dfPlot3 <- mutate(inference,
+models <- c(
+    "DEqMS",
+    "MSstatsTMT",
+    "msTrawler",
+    "msqrob2_rrilmm",
+    "msqrob2_psm_rrilmm",
+    "msqrob2_psm_rrilmm_refit"
+)
+
+## figS8A: Include only the proteins fit by each model, irrespective
+## of the set of proteins fit by the other models
+dfPlotS8A <- filter(inference, Model %in% models) |>
+    group_by(Model) |>
+    mutate(adjPval = p.adjust(pval, method = "BH"),
+           Model = factor(Model, levels = models)) |>
+    ungroup()
+(figS8A <- plotTprFdp(dfPlotS8A, colours))
+
+## figS8B: Include all ground-truth DA proteins
+## Retrieve all the proteins, whether they are fit or not
+allProts <- list.files(dataDir, "spikein2_model", full.names = TRUE) |>
+    lapply(readRDS) |>
+    do.call(what = rbind) |>
+    pull(Protein) |>
+    unique()
+## Use the number of nDA as the known number of true positives
+nDA <- sum(grepl("YEAST", allProts)) * length(unique(dfPlotS8A$Comparison))
+(figS8B <- plotTprFdp(dfPlotS8A, colours, nTP = nDA))
+
+## figS8C: Include only the set of proteins found across all models
+commonProteins <- split(dfPlotS8A$Protein, paste0(dfPlotS8A$Model)) |>
+    Reduce(f = intersect)
+(figS8C <- filter(dfPlotS8A, Protein %in% commonProteins) |>
+        plotTprFdp(colours))
+
+## Combine panels
+(figS8 <- figS8A +
+        ggtitle("Performance considering only proteins fit by each method individually") +
+        figS8B +
+        ggtitle("Performance considering all ground truth DA proteins") +
+        figS8C +
+        ggtitle("Performance considering proteins commonly fit by all methods") +
+        plot_layout(guides = "collect", ncol = 1) +
+        plot_annotation(tag_levels = "A") &
+        ylim(0, 0.25) &
+        xlim(0, 1) &
+        guides(colour = guide_legend(nrow = 2, byrow = TRUE)) &
+        theme(legend.position = "bottom",
+              legend.title = element_blank()))
+ggsave(
+    paste0(plotDir, "figureS8.png"), plot = figS8,
+    width = 8, height = 10
+)
+
+####---- Figure S9: compare preprocessing workflows ----####
+
+models <- c(
+    "msqrob2_rrilmm",
+    "msqrob2_psm_rrilmm",
+    "msqrob2_psm_rrilmm_refit",
+    "msTrawler"
+)
+
+dfPlotS9 <- list.files(dataDir, "spikein2_model", full.names = TRUE) |>
+    lapply(readRDS) |>
+    do.call(what = rbind) |>
+    filter(!is.na(adjPval),
+           Preprocessing == "msTrawler",
+           Model %in% models) |>
+    select(Protein, logFC, pval, adjPval, Comparison, Model) |>
+    mutate(Differential = grepl("YEAST", Protein)) |>
+    group_by(Model) |>
+    mutate(adjPval = p.adjust(pval, method = "BH"),
+           Model = factor(Model, levels = models)) |>
+    ungroup()
+
+## figS9A: Include only the proteins fit by each model, irrespective
+## of the set of proteins fit by the other models
+(figS9A <- plotTprFdp(dfPlotS9, colours))
+
+## figS9B: Include all ground-truth DA proteins
+## Retrieve all the proteins, whether they are fit or not
+allProts <- list.files(dataDir, "spikein2_model", full.names = TRUE) |>
+    lapply(readRDS) |>
+    do.call(what = rbind) |>
+    pull(Protein) |>
+    unique()
+## Use the number of nDA as the known number of true positives
+nDA <- sum(grepl("YEAST", allProts)) * length(unique(dfPlotS9$Comparison))
+(figS9B <- plotTprFdp(dfPlotS9, colours, nTP = nDA))
+
+## figS9C: Include only the set of proteins found across all models
+commonProteins <- split(dfPlotS9$Protein, paste0(dfPlotS9$Model)) |>
+    Reduce(f = intersect)
+(figS9C <- filter(dfPlotS9, Protein %in% commonProteins) |>
+        plotTprFdp(colours))
+
+## Combine panels
+(figS9 <- figS9A +
+        ggtitle("Performance considering only proteins fit by each method individually") +
+        figS9B +
+        ggtitle("Performance considering all ground truth DA proteins") +
+        figS9C +
+        ggtitle("Performance considering proteins commonly fit by all methods") +
+        plot_layout(guides = "collect", ncol = 1) +
+        plot_annotation(tag_levels = "A",
+                        title = "Comparing performance after msTrawler preprocessing",
+                        theme = theme(title = element_text(size = 12, face = "bold"))) &
+        ylim(0, 0.25) &
+        xlim(0, 1) &
+        guides(colour = guide_legend(nrow = 2, byrow = TRUE)) &
+        theme(legend.position = "bottom",
+              legend.title = element_blank()))
+ggsave(
+    paste0(plotDir, "figureS9.png"), plot = figS9,
+    width = 8, height = 10
+)
+
+####---- Figure S10: P-value distribution under the null ----####
+
+models <- c(
+    "msqrob2_rrilmm",
+    "msqrob2_psm_rrilmm",
+    "msqrob2_psm_rrilmm_refit",
+    "DEqMS",
+    "msTrawler"
+)
+
+dfPlotS10 <- mutate(inference,
                   Model = factor(Model, levels = models)) |>
     filter(!Differential,
            Model %in% models,
            Comparison %in% c("11 - 1", "2 - 1", "14 - 11", "20 - 18"))
 
-(fig3 <- ggplot(dfPlot3) +
+(figS10 <- ggplot(dfPlotS10) +
         aes(x = pval, color = Model) +
         geom_borderstep(
             stat = "bin", bins =40, position = "identity",
@@ -176,126 +304,6 @@ dfPlot3 <- mutate(inference,
         theme(legend.title = element_blank(),
               legend.position = "bottom"))
 ggsave(
-    paste0(plotDir, "spikein2_null_distribution.png"), plot = fig3,
+    paste0(plotDir, "figureS10.png"), plot = figS10,
     width = 7, height = 5
-)
-
-####---- Supplementary: TPR-FDP curves for 3 strategies ----####
-
-models <- c(
-    "DEqMS",
-    "MSstatsTMT",
-    "msTrawler",
-    "msqrob2_rrilmm",
-    "msqrob2_psm_rrilmm",
-    "msqrob2_psm_rrilmm_refit"
-)
-
-## figS1A: Include only the proteins fit by each model, irrespective
-## of the set of proteins fit by the other models
-dfPlotS1A <- filter(inference, Model %in% models) |>
-    group_by(Model) |>
-    mutate(adjPval = p.adjust(pval, method = "BH"),
-           Model = factor(Model, levels = models)) |>
-    ungroup()
-(figS1A <- plotTprFdp(dfPlotS1A, colours))
-
-## figS1B: Include all ground-truth DA proteins
-## Retrieve all the proteins, whether they are fit or not
-allProts <- list.files(dataDir, "spikein2_model", full.names = TRUE) |>
-    lapply(readRDS) |>
-    do.call(what = rbind) |>
-    pull(Protein) |>
-    unique()
-## Use the number of nDA as the known number of true positives
-nDA <- sum(grepl("YEAST", allProts)) * length(unique(dfPlotS1A$Comparison))
-(figS1B <- plotTprFdp(dfPlotS1A, colours, nTP = nDA))
-
-## figS1C: Include only the set of proteins found across all models
-commonProteins <- split(dfPlotS1A$Protein, paste0(dfPlotS1A$Model)) |>
-    Reduce(f = intersect)
-(figS1C <- filter(dfPlotS1A, Protein %in% commonProteins) |>
-        plotTprFdp(colours))
-
-## Combine panels
-(figS1 <- figS1A +
-        ggtitle("Performance considering only proteins fit by each method individually") +
-        figS1B +
-        ggtitle("Performance considering all ground truth DA proteins") +
-        figS1C +
-        ggtitle("Performance considering proteins commonly fit by all methods") +
-        plot_layout(guides = "collect", ncol = 1) +
-        plot_annotation(tag_levels = "A") &
-        ylim(0, 0.25) &
-        xlim(0, 1) &
-        guides(colour = guide_legend(nrow = 2, byrow = TRUE)) &
-        theme(legend.position = "bottom",
-              legend.title = element_blank()))
-ggsave(
-    paste0(plotDir, "spikein2_supp_tpr_fdp.png"), plot = figS1,
-    width = 8, height = 10
-)
-
-####---- Supplementary: compare preprocessing workflows ----####
-
-models <- c(
-    "msqrob2_rrilmm",
-    "msqrob2_psm_rrilmm",
-    "msqrob2_psm_rrilmm_refit",
-    "msTrawler"
-)
-
-dfPlotS2 <- list.files(dataDir, "spikein2_model", full.names = TRUE) |>
-    lapply(readRDS) |>
-    do.call(what = rbind) |>
-    filter(!is.na(adjPval),
-           Preprocessing == "msTrawler",
-           Model %in% models) |>
-    select(Protein, logFC, pval, adjPval, Comparison, Model) |>
-    mutate(Differential = grepl("YEAST", Protein)) |>
-    group_by(Model) |>
-    mutate(adjPval = p.adjust(pval, method = "BH"),
-           Model = factor(Model, levels = models)) |>
-    ungroup()
-
-## figS2A: Include only the proteins fit by each model, irrespective
-## of the set of proteins fit by the other models
-(figS2A <- plotTprFdp(dfPlotS2, colours))
-
-## figS2B: Include all ground-truth DA proteins
-## Retrieve all the proteins, whether they are fit or not
-allProts <- list.files(dataDir, "spikein2_model", full.names = TRUE) |>
-    lapply(readRDS) |>
-    do.call(what = rbind) |>
-    pull(Protein) |>
-    unique()
-## Use the number of nDA as the known number of true positives
-nDA <- sum(grepl("YEAST", allProts)) * length(unique(dfPlotS2$Comparison))
-(figS2B <- plotTprFdp(dfPlotS2, colours, nTP = nDA))
-
-## figS1C: Include only the set of proteins found across all models
-commonProteins <- split(dfPlotS2$Protein, paste0(dfPlotS2$Model)) |>
-    Reduce(f = intersect)
-(figS2C <- filter(dfPlotS2, Protein %in% commonProteins) |>
-        plotTprFdp(colours))
-
-## Combine panels
-(figS2 <- figS2A +
-        ggtitle("Performance considering only proteins fit by each method individually") +
-        figS2B +
-        ggtitle("Performance considering all ground truth DA proteins") +
-        figS2C +
-        ggtitle("Performance considering proteins commonly fit by all methods") +
-        plot_layout(guides = "collect", ncol = 1) +
-        plot_annotation(tag_levels = "A",
-                        title = "Comparing performance after msTrawler preprocessing",
-                        theme = theme(title = element_text(size = 12, face = "bold"))) &
-        ylim(0, 0.25) &
-        xlim(0, 1) &
-        guides(colour = guide_legend(nrow = 2, byrow = TRUE)) &
-        theme(legend.position = "bottom",
-              legend.title = element_blank()))
-ggsave(
-    paste0(plotDir, "spikein2_supp_compare_preprocess.png"), plot = figS2,
-    width = 8, height = 10
 )
