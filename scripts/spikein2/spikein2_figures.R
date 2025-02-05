@@ -89,7 +89,7 @@ dfPlot5C <- group_by(dfPlot5, Model) |>
               legend.title = element_blank()))
 ggsave(
     paste0(plotDir, "figure5.png"), plot = fig5,
-    width = 8, height = 6
+    width = 8, height = 6, dpi = 1200
 )
 
 ####---- Figure 6: LogFC boxplots ----####
@@ -149,7 +149,7 @@ limMax <- 2
 )
 ggsave(
     paste0(plotDir, "figure6.png"), plot = fig6,
-    width = 7, height = 5
+    width = 7, height = 5, dpi = 1200
 )
 
 ####---- Figure S8: TPR-FDP curves for 3 strategies ----####
@@ -205,7 +205,7 @@ commonProteins <- split(dfPlotS8A$Protein, paste0(dfPlotS8A$Model)) |>
               legend.title = element_blank()))
 ggsave(
     paste0(plotDir, "figureS8.png"), plot = figS8,
-    width = 8, height = 10
+    width = 8, height = 10, dpi = 1200
 )
 
 ####---- Figure S9: compare preprocessing workflows ----####
@@ -269,7 +269,7 @@ commonProteins <- split(dfPlotS9$Protein, paste0(dfPlotS9$Model)) |>
               legend.title = element_blank()))
 ggsave(
     paste0(plotDir, "figureS9.png"), plot = figS9,
-    width = 8, height = 10
+    width = 8, height = 10, dpi = 1200
 )
 
 ####---- Figure S10: P-value distribution under the null ----####
@@ -305,5 +305,5 @@ dfPlotS10 <- mutate(inference,
               legend.position = "bottom"))
 ggsave(
     paste0(plotDir, "figureS10.png"), plot = figS10,
-    width = 7, height = 5
+    width = 7, height = 5, dpi = 1200
 )

@@ -97,7 +97,7 @@ dfPlot2C <- group_by(dfPlot2, Model) |>
               legend.title = element_blank()))
 ggsave(
     paste0(plotDir, "figure2.png"), plot = fig2,
-    width = 8, height = 6
+    width = 8, height = 6, dpi = 1200
 )
 
 ####---- Figure 3: LogFC boxplots ----####
@@ -156,7 +156,7 @@ limMin <- -3
 )
 ggsave(
     paste0(plotDir, "figure3.png"), plot = fig3,
-    width = 7, height = 5
+    width = 7, height = 5, dpi = 1200
 )
 
 ####---- Figure 4: Compare msqrob2TMT flavours ----####
@@ -190,7 +190,7 @@ fig4 <- lapply(split(dfPlot4, dfPlot4$level), function(x) {
 (fig4 <- wrap_plots(fig4))
 ggsave(
     paste0(plotDir, "figure4.png"), plot = fig4,
-    width = 7, height = 4
+    width = 7, height = 4, dpi = 1200
 )
 
 ####---- Figure S1: TPR-FDP curves for 3 strategies ----####
@@ -242,7 +242,7 @@ commonProteins <- split(dfPlotS1$Protein, paste0(dfPlotS1$Model)) |>
               legend.title = element_blank()))
 ggsave(
     paste0(plotDir, "figureS1.png"), plot = figS1,
-    width = 8, height = 10
+    width = 8, height = 10, dpi = 1200
 )
 
 
@@ -258,7 +258,7 @@ dfPlotS2 <- filter(dfPlotS1, Model %in% models) |>
     guides(colour =guide_legend(nrow = 2, byrow = TRUE)))
 ggsave(
     paste0(plotDir, "figureS2.png"), plot = figS2,
-    width = 8, height = 8
+    width = 8, height = 8, dpi = 1200
 )
 
 nDA <- sum(grepl("ups", allProts))
@@ -272,7 +272,7 @@ dfPlotS3 <- filter(dfPlotS1, Model %in% models) |>
         guides(colour = guide_legend(nrow = 2, byrow = TRUE)))
 ggsave(
     paste0(plotDir, "figureS3.png"), plot = figS3,
-    width = 8, height = 8
+    width = 8, height = 8, dpi = 1200
 )
 
 dfPlotS4 <- filter(dfPlotS1,
@@ -287,7 +287,7 @@ dfPlotS4 <- filter(dfPlotS1,
         guides(colour =guide_legend(nrow = 2, byrow = TRUE)))
 ggsave(
     paste0(plotDir, "figureS4.png"), plot = figS4,
-    width = 8, height = 8
+    width = 8, height = 8, dpi = 1200
 )
 
 ####---- Figure S5: spike-in with replication  ----####
@@ -341,7 +341,7 @@ commonProteins <- split(dfPlotS5$Protein, paste0(dfPlotS5$Model)) |>
               legend.title = element_blank()))
 ggsave(
     paste0(plotDir, "figureS5.png"), plot = figS5,
-    width = 8, height = 10
+    width = 8, height = 10, dpi = 1200
 )
 
 ####---- Figure S6: P-value distribution under the null ----####
@@ -369,7 +369,7 @@ dfPlotS6 <- mutate(inference,
               legend.position = "bottom"))
 ggsave(
     paste0(plotDir, "figureS6.png"), plot = figS6,
-    width = 7, height = 5
+    width = 7, height = 5, dpi = 1200
 )
 
 ####---- Figure S7: compare preprocessing workflows ----####
@@ -443,5 +443,5 @@ commonProteins <- split(dfPlotS7$Protein, paste0(dfPlotS7$Model)) |>
               legend.title = element_blank()))
 ggsave(
     paste0(plotDir, "figureS7.png"), plot = figS7,
-    width = 5.5, height = 10
+    width = 5.5, height = 10, dpi = 1200
 )
