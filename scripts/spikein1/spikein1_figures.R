@@ -120,7 +120,7 @@ limMin <- -3
                    linewidth = 0.8, alpha = 0.5) +
         facet_grid(~ Comparison, scales= "free") +
         ylim(limMin, NA) +
-        labs(title = "Yeast background proteins", y = "log2 fold change") +
+        labs(title = "HeLa background proteins", y = "log2 fold change") +
         scale_colour_manual(values = colours) +
         theme_bw())
 
