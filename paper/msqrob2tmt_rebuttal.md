@@ -46,7 +46,7 @@ We thank reviewer 3 for their positive response. There has indeed been a decreas
 
 ## Reviewer 4
 
-We thank reviewer 4 for their comments. Below, we provide and answer to each concern and adapted the manuscript.
+We thank reviewer 4 for their comments. Below, we provide an answer to each concern and indicate how we adapted the manuscript accordingly.
 
 1. Section 2.3. Both FDR and FDP are used in the evaluation. The authors should clarify the differences between these two. In addition, peptide level FDRs and protein level FDRs should be clarified. In Fig. 2A, the dots represent 5% FDR, the authors should clarify why the corresponding FDPs of the dots are so different from each other.
 
@@ -58,7 +58,7 @@ Interestingly, the FDP can be computed for the spike-in studies that are used to
 
 As there are no repeats available for the spike-in studies, we have opted to plot the observed FDP at the nominal 5% FDR-level on the performance curves as an indication on how well a workflow can control the FDR.
 
-Note, that the FDP in a specific spike-in study is expected to deviate from the nominal 5% FDR-level by random chance as the FDR corresponds to the FDP we expect on average rather than the FDP for the single spike-in study.
+Note, that the FDP in a specific spike-in study is expected to deviate from the nominal 5% FDR-level by random chance, as the FDR corresponds to the FDP we expect on average rather than the FDP for the single spike-in study.
 
 However, severe deviations of the observed FDP and the nominal FDR level are unexpected and are indicative that a workflow provides poor FDR control as discussed in section 3.2: "These findings are further corroborated by the results at the 5% FDR level, shown in Figure 2 C. All msqrob2 workflows demonstrate high sensitivity and low FDP. Specifically, they recover between 143 - 175 DA hits (true positives,TP) for spike-in UPS proteins across all 6 pairwise comparisons while only reporting between 3 - 9 false positives (FP) for HeLa proteins. As a result, their FDP ranges between 2.1% - 5.1%, suggesting appropriate FDR control at the 5% level. The default msTrawler workflow, however, was only able to recover 142 TP and reported 14 FP, leading to an FDP of 9%. With our refactored import function this improved to 184 TP, 9 FP and an FDP of 4.7%. The summarisation-based workflows DEqMS and MSstatsTMT, reported 169 and 147 TP, respectively, with 39 and 11 FP, resulting in FDPs of 18.8% and 7%, respectively, suggesting improper FDR control by DEqMS."
 
